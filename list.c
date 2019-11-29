@@ -17,7 +17,6 @@ Item *nodeAlloc()
   node->prev = NULL;
   node->next = NULL;
   node->f = node->g = node->h = (double)0.0;
-
   return node;
 }
 
@@ -46,7 +45,13 @@ int listCount( list_t *list )
 // return an item with corresponding board , or null
 Item* onList( list_t *list, char *board)
 {
-  return NULL;
+	Item* premier = list->first ;
+	do{
+		if (strcmp(board , premier->board)==0) return premier ;
+		premier = premier->next ;
+	} while (premier != list->first); 
+
+	return NULL;
 }
 
 // return and remove first item

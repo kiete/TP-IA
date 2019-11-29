@@ -1,1 +1,6 @@
 /board.o
+/list.o
+/nqueens
+\settings.json
+\launch.json
+/.idea/*
