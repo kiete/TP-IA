@@ -57,8 +57,9 @@ Item* onList( list_t *list, char *board)
 // return and remove first item
 Item *popFirst( list_t *list ) //
 {
-	Item *item = NULL;
-	return item;
+	Item *Temp = list->first;
+	list->first=list->first->next ;
+	return Temp;
 }
 
 // return and remove last item
