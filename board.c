@@ -5,6 +5,7 @@
 #include <math.h>
 #include "board.h"
 
+
 // Initialize a new Game for the nQueens problem: an empty board..
 Item *initGame()
 {
@@ -43,22 +44,29 @@ void printBoard( Item *node )
 
 // initialize node's state from a given board
 void initBoard(Item *node, char *board) {
+  int i;
 	assert( node );
 	
 	node->size = MAX_BOARD;
   node->board = calloc(MAX_BOARD, sizeof(char));
-  
-	/* Copy board */
 
+  for (i=0 ; i < MAX_BOARD ; i++){
+    node->board[i] = 0 ;
+  }
+  return ;
 }
 
 // Return 0 if all queens are placed. Positive otherwise
 // Ie: nb queens that still need to be placed.
 double evaluateBoard(Item *node) {
-  int nb = 1;
+  int nb = NB_QUEENS ;
+  int i = 0 ;
 
-	// complete
-	
+  for (i = 0; i < MAX_BOARD; i++)
+  {
+    if (node->board[i] == 1) nb-- ;
+  }
+
   return nb;
 }
 
@@ -66,13 +74,24 @@ double evaluateBoard(Item *node) {
 // nQueens -> not same row ; not same column ; not same diagonal
 int isValidPosition( Item *node, int pos )
 {
+  int tmpi , tmpj , tmp;
 	int ii = pos / WH_BOARD;
 	int jj = pos % WH_BOARD;
 
   for (int i=0; i<WH_BOARD; i++) {
   	for (int j=0; j<WH_BOARD; j++) {
-      if (0) { // test if position is valid... to complete
-				return 0;
+      if(node->board[i*WH_BOARD+j]==1){
+        if((i == ii)|| (j == jj)) return 0;
+          // On teste la diagonale
+          // On se place en haut de la diagonale sup
+          tmp = min(ii,jj) ;
+          tmpi = ii - tmp ;
+          tmpj = jj - tmp ;
+          while((tmpi<WH_BOARD) && (tmpj<WH_BOARD)){
+            
+          return 0;
+        }
+
       }
     }
   }

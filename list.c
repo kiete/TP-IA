@@ -59,40 +59,138 @@ Item *popFirst( list_t *list ) //
 {
 	Item *Temp = list->first;
 	list->first=list->first->next ;
+	list->first->prev = NULL ;
+	list->numElements -- ;
+
 	return Temp;
 }
 
 // return and remove last item
 Item *popLast( list_t *list ) //
 {
-	Item *item = NULL;
-  return item;
+	Item *temp = list->last ;
+	list->last = list->last->prev ;
+	list->last->next = NULL ;
+	list->numElements -- ;
+
+	return temp;
 }
 
 // remove a node from list
 void delList( list_t *list, Item *node) {
+	Item *tempPrev = node->prev ;
+	Item *tempNext = node->next ;
+	if (tempPrev == NULL){
+		// On est au premier element
+		list->first = tempNext ;
+		list->first->prev = NULL ;
+	}else{
+		tempPrev->next = tempNext;
+	}
+	if (tempNext == NULL){
+		// On est au dernier element
+		list->last = tempPrev ;
+		list->last->next = NULL ;
+	}else{
+		tempNext->prev = tempPrev;
+	}
+
+	list->numElements -- ;
+	freeItem(node);
+	return;
 }
 
 // return and remove best item with minimal f value
 Item *popBest( list_t *list ) // and remove the best board from the list.
 {
-  Item *item = NULL;
-  return item;
+	Item *minimum , *challenger ;
+
+	if (list->numElements == 0) return NULL ;
+
+	minimum , challenger = list->first ;
+	do{
+		if (minimum->f > challenger->f) minimum = challenger ;
+		challenger = challenger->next ;
+	}while (challenger != NULL) ;
+
+	Item *tempPrev = minimum->prev;
+	Item *tempNext = minimum->next;
+
+	if (tempPrev == NULL)
+	{
+		// On est au premier element
+		list->first = tempNext;
+		list->first->prev = NULL;
+	}
+	else
+	{
+		tempPrev->next = tempNext;
+	}
+	if (tempNext == NULL)
+	{
+		// On est au dernier element
+		list->last = tempPrev;
+		list->last->next = NULL;
+	}
+	else
+	{
+		tempNext->prev = tempPrev;
+	}
+
+	list->numElements--;
+
+	return minimum ;
 }
 
  // add item in top
 void addFirst( list_t *list, Item *node ) // add in head
 {
+	if (list->numElements == 0)
+	{
+		list->last = node;
+	}else{
+		list->first->prev = node ;
+	}
+
+	node->next = list->first ;
+	node->prev = NULL ;
+	list->first = node ;
+
+	list->numElements ++ ;
+	return ;
 }
 
  // add item in queue
 void addLast( list_t *list, Item *node ) // add in tail
 {
+	if (list->numElements==0){
+		list->first = node ;
+	}else{
+		list->last->next = node ;
+	}
+	node->prev = list->last;
+	node->next = NULL;
+	list->last = node;
+
+	list->numElements ++ ;
+	return ;
 }
 
 void cleanupList( list_t *list )
 {
-	
+	Item *temp , *temp2 ;
+
+	temp = list->first ;
+	while (temp != NULL)
+	{
+		temp2 = temp->next ;
+		free(temp) ;
+		temp = temp2 ;
+	}
+	list->first = NULL ; 
+	list->last = NULL ;
+	list->numElements = 0 ;
+	return ;
 }
 
 void printList( list_t list ) {
@@ -104,71 +202,3 @@ void printList( list_t list ) {
   printf(" (nb_items: %d)\n", list.numElements);
 }
 
-/*
-
-// TEST LIST
-
-int main()
-{
-  Item *item;
-	char str[3];
-
-	list_t openList;
-  
-	initList( &openList );
-
-	for (int i=0; i<10; i++) {
-		item = nodeAlloc();
-		item->f = i;
-		sprintf(str, "%2d", i);
-		strcpy(item->board, str);
-		addLast( &openList, item );
-	}
-
-	for (int i=20; i<25; i++) {
-    item = nodeAlloc();
-    item->f = i;
-    sprintf(str, "%2d", i);
-    strcpy(item->board, str);
-    addFirst( &openList, item );
-  }	
-	printList(openList);
-	printf("\n");
-
-	Item *node = popBest( &openList );
-	printf("best node = %.2f\n", node->f);
-	printList(openList);
-	printf("\n");
-
-	strcpy(str, "23");
-	node = onList(&openList, str);
-	if (node) printf("found %s: %.2f!\n", str, node->f); 
-	printList(openList);
-	printf("\n");
-
-	node = popFirst(&openList);
-	
-		item = nodeAlloc();
-    item->f = 50;
-    sprintf(str, "50");
-    strcpy(item->board, str);
-    addLast( &openList, item );
-
-	node = popFirst(&openList);
-	if (node) printf("first: %.2f\n", node->f); 
-	printList(openList);
-  printf("\n");
-
-	node = popLast(&openList);
-	if (node) printf("last: %.2f\n", node->f); 
-	printList(openList);
-  printf("\n");
-
-	printf("clean\n");	
-	cleanupList(&openList);
-	printList(openList);
-	printf("\n");
-  
-	return 0;
-}
-*/
