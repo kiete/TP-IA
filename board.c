@@ -5,7 +5,7 @@
 #include <math.h>
 #include "board.h"
 
-
+// essai
 // Initialize a new Game for the nQueens problem: an empty board..
 Item *initGame()
 {
