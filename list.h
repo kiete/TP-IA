@@ -10,6 +10,8 @@ typedef struct {
   Item *last;
 } list_t;
 
+// Renvoie 1 si a = b
+int cmpBoard(char *a, char *b, char size);
 
 Item *nodeAlloc();
 void freeItem( Item *node );

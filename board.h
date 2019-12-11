@@ -8,8 +8,6 @@
 #define WH_BOARD 8 //5
 #define NB_QUEENS 8 //
 
-
-
 Item *initGame();
 
 void initBoard(Item *node, char *board);

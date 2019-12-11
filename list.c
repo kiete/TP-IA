@@ -6,6 +6,18 @@
 
 /* Item Functions */
 
+int cmpBoard(char *a, char *b, char size)
+{
+	int i;
+
+	for (i = 0; i < size; i++)
+	{
+		if (a[i] != b[i])
+			return 0;
+	}
+	return 1;
+}
+
 Item *nodeAlloc()
 {
   Item *node;
@@ -42,16 +54,21 @@ int listCount( list_t *list )
 	return list->numElements;
 }
 
+
 // return an item with corresponding board , or null
 Item* onList( list_t *list, char *board)
 {
-	Item* premier = list->first ;
-	do{
-		if (strcmp(board , premier->board)==0) return premier ;
-		premier = premier->next ;
-	} while (premier != list->first); 
+	int i;
 
-	return NULL;
+	Item* premier = list->first ;
+	printf("\n\n\n%d\n\n\n" , premier->size);
+	while (premier != NULL  && !cmpBoard(premier->board, board , premier->size))
+	{
+		printf("%s | %s | %d\n", premier->board, board, cmpBoard(premier->board, board ,premier->size ));
+		premier = premier->next ;
+	}
+	
+	return premier;
 }
 
 // return and remove first item
@@ -151,7 +168,6 @@ void addFirst( list_t *list, Item *node ) // add in head
 	}else{
 		list->first->prev = node ;
 	}
-
 	node->next = list->first ;
 	node->prev = NULL ;
 	list->first = node ;

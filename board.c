@@ -5,7 +5,6 @@
 #include <math.h>
 #include "board.h"
 
-// essai
 // Initialize a new Game for the nQueens problem: an empty board..
 Item *initGame()
 {
@@ -80,19 +79,7 @@ int isValidPosition( Item *node, int pos )
 
   for (int i=0; i<WH_BOARD; i++) {
   	for (int j=0; j<WH_BOARD; j++) {
-      if(node->board[i*WH_BOARD+j]==1){
-        if((i == ii)|| (j == jj)) return 0;
-          // On teste la diagonale
-          // On se place en haut de la diagonale sup
-          tmp = min(ii,jj) ;
-          tmpi = ii - tmp ;
-          tmpj = jj - tmp ;
-          while((tmpi<WH_BOARD) && (tmpj<WH_BOARD)){
-            
-          return 0;
-        }
-
-      }
+      if ((node->board[i * WH_BOARD + j] == 1) && ((i == ii) || (j == jj) || (abs(ii - i) == abs(jj - j)))) return 0;
     }
   }
   return 1;

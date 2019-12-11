@@ -9,8 +9,8 @@ board.o: board.c board.h
 nqueens: nqueens.c board.o list.o
 	gcc -o nqueens nqueens.c board.c list.c
 
-test_list: test_list.c list.o
-	gcc -o test_list test_list.c
+test_list: test_list.c list.o board.o
+	gcc -o test_list test_list.c board.o
 
 clean:
 	rm *.o

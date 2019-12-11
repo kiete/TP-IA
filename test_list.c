@@ -15,6 +15,7 @@ int main()
         item = nodeAlloc();
         item->f = i;
         sprintf(str, "%2d", i);
+        
         item->board = strdup(str);
         addLast(&openList, item);
     }
@@ -35,7 +36,7 @@ int main()
     printList(openList);
     printf("\n");
 
-    strcpy(str, "23");
+    strcpy(str, "6");
     node = onList(&openList, str);
     if (node)
         printf("found %s: %.2f!\n", str, node->f);
