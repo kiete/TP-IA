@@ -50,7 +50,7 @@ void initBoard(Item *node, char *board) {
   node->board = calloc(MAX_BOARD, sizeof(char));
 
   for (i=0 ; i < MAX_BOARD ; i++){
-    node->board[i] = 0 ;
+    node->board[i] = board[i] ;
   }
   return ;
 }

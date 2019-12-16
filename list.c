@@ -12,8 +12,8 @@ int cmpBoard(char *a, char *b, char size)
 
 	for (i = 0; i < size; i++)
 	{
-		if (a[i] != b[i])
-			return 0;
+		printf("%c , %c \n" , a[i] , b[i] );
+		if (a[i] != b[i]) return 0;
 	}
 	return 1;
 }

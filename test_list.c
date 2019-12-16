@@ -1,4 +1,8 @@
-#include "list.c"
+#include "board.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 // TEST LIST
 
 int main()
@@ -15,8 +19,7 @@ int main()
         item = nodeAlloc();
         item->f = i;
         sprintf(str, "%2d", i);
-        
-        item->board = strdup(str);
+        initBoard(item , str);
         addLast(&openList, item);
     }
     for (int i = 20; i < 25; i++)
@@ -24,7 +27,7 @@ int main()
         item = nodeAlloc();
         item->f = i;
         sprintf(str, "%2d", i);
-        item->board = strdup(str);
+        initBoard(item, str);
         addFirst(&openList, item);
     }
 

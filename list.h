@@ -26,5 +26,6 @@ void addFirst( list_t *list, Item *node ); // add item in top
 void addLast( list_t *list, Item *node ); // add item in queue
 void delList( list_t *list, Item *node); // remove a node from list
 void cleanupList( list_t *list ); // empty list and free items
+void printList(list_t list);
 
 #endif
