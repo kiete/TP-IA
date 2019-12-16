@@ -88,15 +88,20 @@ int isValidPosition( Item *node, int pos )
 // Return a new item where a new queen is added at position pos if possible. NULL if not valid
 Item *getChildBoard( Item *node, int pos )
 {
-  Item *child_p = NULL;
+  Item *child_p = NULL ;
+  int i ;
   
 	if ( isValidPosition(node, pos) ) {
-
     /* allocate and init child node */
+    child_p =  nodeAlloc();
+    initBoard(child_p , node->board) ;
 
-		/* Make move */
+    /* Make move */
+    child_p->board[pos] = 1;
 
-		/* link child to parent for backtrack */
+    /* link child to parent for backtrack */
+    child_p -> parent = node ;
+    child_p -> depth ++ ;
   }
 
   return child_p;

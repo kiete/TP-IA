@@ -4,9 +4,9 @@
 #define RANDOM()  ((float)rand() / (float)RAND_MAX)
 #define RANDMAX(x)  (int)((float)(x)*rand()/(RAND_MAX+1.0))
 
-#define MAX_BOARD 64 //25
-#define WH_BOARD 8 //5
-#define NB_QUEENS 8 //
+#define MAX_BOARD 16 //25
+#define WH_BOARD 4 //5
+#define NB_QUEENS 4 //
 
 Item *initGame();
 

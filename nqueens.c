@@ -35,15 +35,15 @@ void bfs( void )
 {
   Item *cur_node, *child_p, *temp;
   int i;
-  
   while ( listCount(&openList_p) ) { /* While items are on the open list */
    	
 		/* Get the first item on the open list */
-		cur_node = popFirst(&openList_p);
-		
-		// printf("%d  %f\n", listCount(&openList_p), evaluateBoard( cur_node ));
+    cur_node = popFirst(&openList_p);
+
+		printf("%d  %f\n", listCount(&openList_p), evaluateBoard( cur_node ));
 
 		/* Add it to the "visited" list */
+    addLast(&closedList_p , cur_node);
 
     /* Do we have a solution? */
     if ( evaluateBoard(cur_node) == 0.0 ) {
@@ -53,15 +53,13 @@ void bfs( void )
     } else {
 
       /* Enumerate adjacent states */
-      for (int i = 0; i < MAX_BOARD; i++) {
+      for (i = 0; i < MAX_BOARD; i++) {
         child_p = getChildBoard( cur_node, i );
+        //printf("%f\n" , child_p->f) ;
    			
         if (child_p != NULL) { // it's a valid child!
-					
-					/* Ignore this child if already visited */
-					
-					/* Add child node to openList */
-	  			addLast( &openList_p, child_p );
+          /* Ignore this child if already visited */
+          if (!onList(&closedList_p, child_p->board)) addLast(&openList_p, child_p);
         }
       }
     }

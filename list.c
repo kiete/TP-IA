@@ -12,7 +12,7 @@ int cmpBoard(char *a, char *b, char size)
 
 	for (i = 0; i < size; i++)
 	{
-		printf("%c , %c \n" , a[i] , b[i] );
+		//printf("%c , %c \n" , a[i] , b[i] );
 		if (a[i] != b[i]) return 0;
 	}
 	return 1;
@@ -61,10 +61,10 @@ Item* onList( list_t *list, char *board)
 	int i;
 
 	Item* premier = list->first ;
-	printf("\n\n\n%d\n\n\n" , premier->size);
+	//printf("\n\n\n%d\n\n\n" , premier->size);
 	while (premier != NULL  && !cmpBoard(premier->board, board , premier->size))
 	{
-		printf("%s | %s | %d\n", premier->board, board, cmpBoard(premier->board, board ,premier->size ));
+		//printf("%s | %s | %d\n", premier->board, board, cmpBoard(premier->board, board ,premier->size ));
 		premier = premier->next ;
 	}
 	
@@ -74,23 +74,46 @@ Item* onList( list_t *list, char *board)
 // return and remove first item
 Item *popFirst( list_t *list ) //
 {
-	Item *Temp = list->first;
-	list->first=list->first->next ;
-	list->first->prev = NULL ;
-	list->numElements -- ;
+	if (list->numElements == 0) return NULL ;
 
+	Item *Temp = list->first;
+
+	if (list->numElements == 1){
+		list->first = NULL ;
+		list->last = NULL ;
+		list->numElements--;
+
+		return Temp ;
+	}
+
+	list->first = list->first->next;
+	list->first->prev = NULL;
+	list->numElements--;
 	return Temp;
 }
 
 // return and remove last item
 Item *popLast( list_t *list ) //
 {
-	Item *temp = list->last ;
+	if (list->numElements == 0)
+		return NULL;
+
+	Item *Temp = list->last;
+
+	if (list->numElements == 1)
+	{
+		list->first = NULL;
+		list->last = NULL;
+		list->numElements--;
+
+		return Temp;
+	}
+
 	list->last = list->last->prev ;
 	list->last->next = NULL ;
 	list->numElements -- ;
 
-	return temp;
+	return Temp;
 }
 
 // remove a node from list
