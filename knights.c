@@ -71,13 +71,14 @@ void bfs( void )
 void dfs( Item *node ){
 	Item *child_p;
 	int i;
-	if ( evaluateBoard(node) == 0.0 ) {
+	if ( evaluateBoardKnight(node) == 1.0 ) {
     	showSolution(node);
 		return;
 	}
 	for (i = 0; i < MAX_BOARD; i++) {
-        child_p = getChildBoard( node, i );
-		if (child_p != NULL && !onList(&openList_p, child_p->board)){
+        child_p = getChildBoardKnight( node, i );
+		if (child_p != NULL && !onList(&closedList_p, child_p->board)){
+            //printBoard(child_p);
 			addLast(&closedList_p, child_p);
 			dfs(child_p);
 		}
@@ -93,6 +94,7 @@ int main()
 	
   printf("\nInitial:");
   Item *initial_state = initGame();
+  initial_state->board[0] = 1;
   printBoard( initial_state );
 
   printf("\nSearching ...\n");

@@ -5,13 +5,14 @@
 #include <math.h>
 #include "board.h"
 
+
 // Initialize a new Game for the nQueens problem: an empty board..
 Item *initGame()
 {
   int i;
   Item *node;
-
-	char *initial = (char*)malloc(MAX_BOARD*sizeof(char));
+  
+  char* initial = (char*)malloc(MAX_BOARD*sizeof(char));
 	for (int i=0; i<MAX_BOARD; i++) initial[i] = 0;
 
   node = nodeAlloc();
@@ -55,6 +56,7 @@ void initBoard(Item *node, char *board) {
   return ;
 }
 
+
 // Return 0 if all queens are placed. Positive otherwise
 // Ie: nb queens that still need to be placed.
 double evaluateBoard(Item *node) {
@@ -68,6 +70,11 @@ double evaluateBoard(Item *node) {
 
   return nb;
 }
+
+double evaluateBoardKnight(Item *node) {
+  return node->board[MAX_BOARD] ;
+}
+
 
 // Test if position pos is valid with respect to node's state
 // nQueens -> not same row ; not same column ; not same diagonal
@@ -85,6 +92,22 @@ int isValidPosition( Item *node, int pos )
   return 1;
 }
 
+int isValidPositionKnight( Item *node, int pos )
+{
+  int tmpi , tmpj , tmp;
+	int ii = pos / WH_BOARD;
+	int jj = pos % WH_BOARD;
+
+  for (int i=0; i<WH_BOARD; i++) {
+  	for (int j=0; j<WH_BOARD; j++) {
+      if (node->board[i * WH_BOARD + j] == 1){
+        if(abs(ii-i)*abs(jj-j)==2) return 1;
+        else return 0;
+      } 
+    }
+  }
+}
+
 // Return a new item where a new queen is added at position pos if possible. NULL if not valid
 Item *getChildBoard( Item *node, int pos )
 {
@@ -97,6 +120,29 @@ Item *getChildBoard( Item *node, int pos )
     initBoard(child_p , node->board) ;
 
     /* Make move */
+    child_p->board[pos] = 1;
+
+    /* link child to parent for backtrack */
+    child_p -> parent = node ;
+    child_p -> depth ++ ;
+  }
+
+  return child_p;
+}
+
+// Return a new item where a new knight is moved at position pos if possible. NULL if not valid
+Item *getChildBoardKnight( Item *node, int pos )
+{
+  Item *child_p = NULL ;
+  int i ;
+  
+	if ( isValidPositionKnight(node, pos)) {
+    /* allocate and init child node */
+    child_p =  nodeAlloc();
+    initBoard(child_p, node->board) ;
+
+    /* Make move */
+    for(i = 0 ; i<MAX_BOARD ; i++) child_p->board[i] = 0 ;
     child_p->board[pos] = 1;
 
     /* link child to parent for backtrack */

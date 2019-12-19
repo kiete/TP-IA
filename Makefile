@@ -1,4 +1,4 @@
-all: nqueens test_list
+all: nqueens test_list knights
 
 list.o: list.c list.h
 	gcc -c list.c
@@ -8,6 +8,9 @@ board.o: board.c board.h
 
 nqueens: nqueens.c board.o list.o
 	gcc -o nqueens nqueens.c board.c list.c
+
+knights: knights.c board.o list.o
+	gcc -o knights knights.c board.c list.c
 
 test_list: test_list.c list.o board.o
 	gcc -o test_list test_list.c board.o list.o
