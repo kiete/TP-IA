@@ -23,7 +23,7 @@ void showSolution( Item *goal )
 		goal = goal->parent;
 		i++;
   }
-
+  printf("SALUT\n");
   printf("\nLength of the solution = %d\n", i-1);
   printf("Size of open list = %d\n", openList_p.numElements);
   printf("Size of closed list = %d\n", closedList_p.numElements);
@@ -102,6 +102,7 @@ int main()
 	addLast( &openList_p, initial_state );
 
   //bfs();
+  //addLast(&closedList_p, initial_state);
   dfs(initial_state);
 	printf("Finished!\n");
   
