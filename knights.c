@@ -36,9 +36,9 @@ void bfs( void )
   Item *cur_node, *child_p, *temp;
   int i;
   while ( listCount(&openList_p) ) { /* While items are on the open list */
-   	
 		/* Get the first item on the open list */
-    cur_node = popFirst(&openList_p);
+    cur_node = popBest(&openList_p);
+    printBoard(cur_node);
 
 		printf("%d  %f\n", listCount(&openList_p), evaluateBoard( cur_node ));
 
@@ -46,21 +46,38 @@ void bfs( void )
     addLast(&closedList_p , cur_node);
 
     /* Do we have a solution? */
-    if ( evaluateBoard(cur_node) == 0.0 ) {
+    if ( evaluateBoardKnight(cur_node) == 1.0 ) {
       showSolution(cur_node);
+      printf("f = %f\n" , cur_node->f);
       return;
 
     } else {
 
       /* Enumerate adjacent states */
       for (i = 0; i < MAX_BOARD; i++) {
-        child_p = getChildBoard( cur_node, i );
+        child_p = getChildBoardKnight( cur_node, i );
         //printf("%f\n" , child_p->f) ;
    			
         if (child_p != NULL) { // it's a valid child!
           /* Ignore this child if already visited */
-          if (!onList(&closedList_p, child_p->board)) addLast(&openList_p, child_p);
-        }
+          if (!onList(&closedList_p, child_p->board)){
+            temp = onList(&openList_p, child_p->board);
+            if (temp){
+              if (temp->f > child_p->f){
+                delList(&openList_p , temp);
+                addFirst(&openList_p , child_p);
+              }
+            } else{
+              addFirst(&openList_p , child_p);
+            }
+          }
+          //   if (!onList(&closedList_p, child_p->board)){
+          //     if (onList(&openList_p, child_p->board)){
+          //       if ()
+          //     }
+          //       addLast(&openList_p, child_p);
+          //   }
+          }
       }
     }
   }
@@ -73,16 +90,17 @@ void dfs( Item *node ){
 	int i;
 	if ( evaluateBoardKnight(node) == 1.0 ) {
     	showSolution(node);
-		return;
+		  return;
 	}
 	for (i = 0; i < MAX_BOARD; i++) {
         child_p = getChildBoardKnight( node, i );
 		if (child_p != NULL && !onList(&closedList_p, child_p->board)){
             //printBoard(child_p);
 			addLast(&closedList_p, child_p);
-			dfs(child_p);
+			
 		}
 	}
+  dfs(child_p);
 }
 
 int main()
@@ -100,10 +118,9 @@ int main()
   printf("\nSearching ...\n");
   
 	addLast( &openList_p, initial_state );
-
-  //bfs();
   //addLast(&closedList_p, initial_state);
-  dfs(initial_state);
+  bfs();
+  //dfs(initial_state);
 	printf("Finished!\n");
   
 	// clean lists 

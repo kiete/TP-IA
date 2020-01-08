@@ -3,6 +3,7 @@
 #include <string.h>
 #include <assert.h>
 #include "list.h"
+#include "board.h"
 
 /* Item Functions */
 
@@ -146,11 +147,14 @@ Item *popBest( list_t *list ) // and remove the best board from the list.
 	Item *minimum , *challenger ;
 
 	if (list->numElements == 0) return NULL ;
+	if (list->numElements == 1) return list->first ;
 
-	minimum , challenger = list->first ;
+	minimum = list->first ;
+	challenger = list->first;
 	do{
 		if (minimum->f > challenger->f) minimum = challenger ;
 		challenger = challenger->next ;
+		
 	}while (challenger != NULL) ;
 
 	Item *tempPrev = minimum->prev;
@@ -178,7 +182,6 @@ Item *popBest( list_t *list ) // and remove the best board from the list.
 	}
 
 	list->numElements--;
-
 	return minimum ;
 }
 

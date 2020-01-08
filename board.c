@@ -72,7 +72,7 @@ double evaluateBoard(Item *node) {
 }
 
 double evaluateBoardKnight(Item *node) {
-  return node->board[MAX_BOARD] ;
+  return (double)node->board[MAX_BOARD-1] ;
 }
 
 
@@ -144,6 +144,9 @@ Item *getChildBoardKnight( Item *node, int pos )
     /* Make move */
     for(i = 0 ; i<MAX_BOARD ; i++) child_p->board[i] = 0 ;
     child_p->board[pos] = 1;
+
+    // Set cost
+    child_p->f = node->f + 1 ;
 
     /* link child to parent for backtrack */
     child_p -> parent = node ;
