@@ -4,6 +4,7 @@
  
  ## Lancer les packages
  À la ligne 1 de chaque package, il se situe la ligne `#define MODE 0`. Le mode correspond à l'algorithme utilisé pour résoudre l'exercice.  Voici un tableau des modes disponibles, leur code ainsi que leur accessibilité.
+ 
  Algorithme | DFS | BFS | UCS | ASTAR
 --- | --- | --- | --- | ---
 Commande | `MODE=0` | `MODE=1` | `MODE=2` | `MODE=3` |
