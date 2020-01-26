@@ -1,3 +1,4 @@
+#define MODE 0
 #include <stdio.h>
 #include <assert.h>
 #include <stdlib.h>
@@ -99,8 +100,13 @@ int main()
   
 	addLast( &openList_p, initial_state );
 
-  //bfs();
-  dfs(initial_state);
+  if (MODE == 0){
+    dfs(initial_state);
+  }else{
+    bfs();
+  }
+  
+  
 	printf("Finished!\n");
   
 	// clean lists 

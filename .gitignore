@@ -1,7 +1,13 @@
-/board.o
-/list.o
-/nqueens
-\settings.json
-\launch.json
+#Fichiers .o
+board.o
+list.o
+
+#Executables
+knights
+taquin
+nqueens
+test_list
+
+# Dossiers de configuration IDE
 /.idea/*
 /.vscode/*
