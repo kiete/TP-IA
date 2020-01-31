@@ -1,3 +1,6 @@
+#define MODE 1
+#define DIFFICULTY 1
+// 1 = EZ, 2 = Medium, 3 = Hard
 #include <stdio.h>
 #include <stdlib.h>
 #include "board.h"
@@ -77,12 +80,96 @@ Item* getChildNode(Item *parent, int pos){
     child->h = getManhattanHeuristic(child);
     child->f = child->g + child->h ;
     child->size = BOARD_TAQUIN ;
-
-    // printf("Parent:\n");
-    // printBoard (parent);
-    // printf("child:\n");
-    // printBoard(child);
     return child;
+}
+
+Item *getChildNodeUCS(Item *parent, int pos)
+{
+    int i;
+
+    if (!isValidPositionTaquin(parent, pos))
+        return NULL;
+
+    Item *child = nodeAlloc();
+    child->board = malloc(BOARD_TAQUIN);
+    child->blank = parent->blank;
+    for (i = 0; i < BOARD_TAQUIN; i++)
+    {
+        child->board[i] = parent->board[i];
+    }
+
+    child->board[child->blank] = child->board[pos];
+    child->blank = pos;
+    child->board[pos] = 0;
+    child->depth = parent->depth + 1;
+    child->parent = parent;
+    child->g = getSimpleHeuristics(child);
+    child->h = getManhattanHeuristic(child);
+    // Just for UCS
+    child->f = child->g;
+    child->size = BOARD_TAQUIN;
+    return child;
+}
+
+void bfs(void)
+{
+    Item *cur_node, *child_p, *temp;
+    int i;
+    while (listCount(&openList_p))
+    { /* While items are on the open list */
+
+        /* Get the first item on the open list */
+        cur_node = popFirst(&openList_p);
+
+        /* Add it to the "visited" list */
+        addLast(&closedList_p, cur_node);
+
+        /* Do we have a solution? */
+        if (evaluateBoardTaq1(cur_node) == 0)
+        {
+            showSolution(cur_node);
+            return;
+        }
+        else
+        {
+
+            /* Enumerate adjacent states */
+            for (i = 0; i < MAX_BOARD; i++)
+            {
+                child_p = getChildNodeUCS(cur_node, i);
+                //printf("%f\n" , child_p->f) ;
+
+                if (child_p != NULL)
+                { // it's a valid child!
+                    /* Ignore this child if already visited */
+                    if (!onList(&closedList_p, child_p->board))
+                        addLast(&openList_p, child_p);
+                }
+            }
+        }
+    }
+
+    return;
+}
+
+void dfs(Item *node)
+{
+    Item *child_p;
+    int i;
+    if (evaluateBoardTaq1(node) == 0)
+    {
+        showSolution(node);
+        return;
+    }
+    for (i = 0; i < MAX_BOARD; i++)
+    {
+        child_p = getChildNodeUCS(node, i);
+        if (child_p != NULL && !onList(&openList_p, child_p->board))
+        {
+            addLast(&closedList_p, child_p);
+            dfs(child_p);
+        }
+    }
 }
 
 void astar(void)
@@ -93,21 +180,15 @@ void astar(void)
     while (listCount(&openList_p))
     {   /* While items are on the open list */
         /* Get the first item on the open list */
-        //printf("%d \n", listCount(&openList_p));
         cur_node = popBest(&openList_p);
-        //printBoard(cur_node);
-        //printf("%d %d %d\n", listCount(&openList_p), listCount(&closedList_p), evaluateBoardTaq1(cur_node));
-
-
-        //printBoard(cur_node);
 
         /* Add it to the "visited" list */
         addLast(&closedList_p, cur_node);
+
         /* Do we have a solution? */
         if (evaluateBoardTaq1(cur_node) == 0)
         {
             showSolution(cur_node);
-            printf("f = %f\n", cur_node->f);
             return;
         }
         else
@@ -116,26 +197,16 @@ void astar(void)
             /* Enumerate adjacent states */
             for (i = 0; i < MAX_BOARD; i++)
             {
-                //printf("OK %d\n" , i);
                 child_p = getChildNode(cur_node, i);
-                // if (child_p){ 
-                //     printf("OK Child cree %d\n", i);
-                //     printBoard(child_p);
-                // }
-
-                //printf("%f\n" , child_p->f) ;
 
                 if (child_p != NULL)
                 { // it's a valid child!
                     /* Ignore this child if already visited */
-                    // printf("child_P s=%d\n", child_p->size);
-                    // printBoard(child_p);
                     if (!onList(&closedList_p, child_p->board))
                     {
                         temp = onList(&openList_p, child_p->board);
                         if (temp)
                         {
-                            //printf("il est la\n");
                             if (temp->f > child_p->f)
                             {
                                 delList(&openList_p, temp);
@@ -145,21 +216,64 @@ void astar(void)
                         else
                         {
                             addFirst(&openList_p, child_p);
-                            //printf("op = %d\n" , listCount(&openList_p));
                         }
                     }
-                    // else //printf("deja vu %d\n" , listCount(&closedList_p));
-                    //   if (!onList(&closedList_p, child_p->board)){
-                    //     if (onList(&openList_p, child_p->board)){
-                    //       if ()
-                    //     }
-                    //       addLast(&openList_p, child_p);
-                    //   }
                 }
             }
+        }
+    }
 
-        //exit(1);
+    return;
+}
 
+void UCS(void)
+{
+
+    Item *cur_node, *child_p, *temp;
+    int i;
+    while (listCount(&openList_p))
+    { /* While items are on the open list */
+
+        /* Get the first item on the open list */
+        cur_node = popBest(&openList_p);
+
+        /* Add it to the "visited" list */
+        addLast(&closedList_p, cur_node);
+        /* Do we have a solution? */
+        if (evaluateBoardTaq1(cur_node) == 0)
+        {
+            showSolution(cur_node);
+            return;
+        }
+        else
+        {
+
+            /* Enumerate adjacent states */
+            for (i = 0; i < MAX_BOARD; i++)
+            {
+                child_p = getChildNodeUCS(cur_node, i);
+                if (child_p != NULL)
+                { // it's a valid child!
+
+                    /* Ignore this child if already visited */
+                    if (!onList(&closedList_p, child_p->board))
+                    {
+                        temp = onList(&openList_p, child_p->board);
+                        if (temp)
+                        {
+                            if (temp->f > child_p->f)
+                            {
+                                delList(&openList_p, temp);
+                                addFirst(&openList_p, child_p);
+                            }
+                        }
+                        else
+                        {
+                            addFirst(&openList_p, child_p);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -177,7 +291,6 @@ void showSolution( Item *goal )
 		goal = goal->parent;
 		i++;
   }
-  printf("SALUT\n");
   printf("\nLength of the solution = %d\n", i-1);
   printf("Size of open list = %d\n", openList_p.numElements);
   printf("Size of closed list = %d\n", closedList_p.numElements);
@@ -209,7 +322,7 @@ int main (){
     initList(&closedList_p);
 
     printf("\nInitial:");
-    Item * plateau = initGameTaquin(3);
+    Item *plateau = initGameTaquin(DIFFICULTY);
     plateau->depth = 0;
     plateau->f = 0 ;
     plateau->size = 9;
@@ -218,7 +331,25 @@ int main (){
     addLast(&openList_p, plateau);
     addLast(&closedList_p, plateau);
 
-    astar();
+    if (MODE == 0){
+        dfs(plateau);
+    }else if (MODE == 1){
+        bfs();
+    }else if (MODE == 2)
+    {
+        UCS();
+    }
+    else if (MODE == 3)
+    {
+        astar();
+    }
+    else
+    {
+        printf("MODE INVALIDE\n");
+        exit(1);
+    }
+
+    
 
     printf("Finished!\n");
 

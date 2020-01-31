@@ -4,12 +4,13 @@
  
  ## Lancer les packages
  À la ligne 1 de chaque package, il se situe la ligne `#define MODE 0`. Le mode correspond à l'algorithme utilisé pour résoudre l'exercice.  Voici un tableau des modes disponibles, leur code ainsi que leur accessibilité.
+ 
  Algorithme | DFS | BFS | UCS | ASTAR
 --- | --- | --- | --- | ---
-Commande | `MODE=0` | `MODE=1` | `MODE=2` | `MODE=3` |
+Commande | `MODE 0` | `MODE 1` | `MODE 2` | `MODE 3` |
 Nqueens | OUI | OUI | NON | NON
 Knight | NON | OUI | OUI | NON
-Nqueens | NON | NON | NON | OUI
+Taquin | NON | OUI | OUI | OUI
  
  ## Nqueens
  Le but du jeu est de résoudre le problème des n reines. Le package nqueens implémente des fonctions de parcours d'arbre. Elles sont très simples, faciles à implémenter mais possèdent des performances médiocres. DFS Parcours en profondeur, (Pour *Depth-First Search*) et BFS Parcours en largeur(Pour *Breadth First Search*) nous donnent rapidement une solution. 
@@ -20,6 +21,14 @@ Nqueens | NON | NON | NON | OUI
  
  ## Taquin
  Le simple algorithme UCS ne pouvait pas suffire pour résoudre un taquin, en effet l'énumération de tous les cas se montre bien trop longue. Nous avons donc implémenté ASTAR, un algorithme basé sur la distance entre l'état courant, et l'objectif. On ne regarde que les cas les plus prometteurs. UCS et BFS n'ont pas été implémentés tellement qu'ils étaient longs pour résoudre un exercice.
+ À la ligne 2, la valeur `#define DIFFICULTY 1` définit la difficulté du taquin à réaliser, d'après le tableau suivant.
+ 
+ Facile | Moyen | Difficile |
+--- | --- | --- |
+`DIFFICULTY 1` | `DIFFICULTY 2` | `DIFFICULTY 3` | 
+
+Il faut penser avant de lancer Taquin, à mettre les bonnes tailles de tables dans `board.h` à savoir `MAX_BOARD  9` et `WH_BOARD 3`. Cette manipulation est indispensable au lancement du module taquin.
+ 
  
 ## Test_list
 Ce package sert à débuger nos algorithmes qui agissent sur les listes

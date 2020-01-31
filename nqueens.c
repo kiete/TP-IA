@@ -3,20 +3,21 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <time.h>
-//#include <malloc.h>
-
 #include "list.h"
 #include "board.h"
 
+int nb_sol = 0;
 
 list_t openList_p;
 list_t closedList_p;
+
+Item* look;
 
 
 void showSolution( Item *goal )
 {
   int i = 0, j;
-
+  //nb_sol++;
   printf("\nSolution:");
 
   while (goal) {
@@ -24,8 +25,9 @@ void showSolution( Item *goal )
 		goal = goal->parent;
 		i++;
   }
-
+  
   printf("\nLength of the solution = %d\n", i-1);
+  printf("nb_sol = %d\n", nb_sol);
   printf("Size of open list = %d\n", openList_p.numElements);
   printf("Size of closed list = %d\n", closedList_p.numElements);
   return;
@@ -41,14 +43,15 @@ void bfs( void )
 		/* Get the first item on the open list */
     cur_node = popFirst(&openList_p);
 
-		printf("%d  %f\n", listCount(&openList_p), evaluateBoard( cur_node ));
+		//printf("%d  %f\n", listCount(&openList_p), evaluateBoard( cur_node ));
 
 		/* Add it to the "visited" list */
     addLast(&closedList_p , cur_node);
 
     /* Do we have a solution? */
     if ( evaluateBoard(cur_node) == 0.0 ) {
-      showSolution(cur_node);
+      look = cur_node;
+      nb_sol++;
       return;
 
     } else {
@@ -73,7 +76,8 @@ void dfs( Item *node ){
 	Item *child_p;
 	int i;
 	if ( evaluateBoard(node) == 0.0 ) {
-    	showSolution(node);
+    look = node;
+    nb_sol++;
 		return;
 	}
 	for (i = 0; i < MAX_BOARD; i++) {
@@ -102,14 +106,17 @@ int main()
 
   if (MODE == 0){
     dfs(initial_state);
-  }else{
+  }else if (MODE == 1){
     bfs();
+  }else{
+    printf("MODE INVALIDE\n");
+    exit(1);
   }
   
   
 	printf("Finished!\n");
-  
-	// clean lists 
+  showSolution(look);
+  // clean lists 
 	cleanupList( &openList_p );
   cleanupList( &closedList_p );
 	

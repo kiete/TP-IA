@@ -92,6 +92,7 @@ int isValidPosition( Item *node, int pos )
   return 1;
 }
 
+// Return 1 si the knight can move to pos, 0 else.
 int isValidPositionKnight( Item *node, int pos )
 {
   int tmpi , tmpj , tmp;

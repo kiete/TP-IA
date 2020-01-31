@@ -3,7 +3,6 @@
 #include "board.h"
 #include "list.h"
 
-
 #define MAX_VECTOR 4
 
 typedef struct {
@@ -28,8 +27,32 @@ Item *initGameTaquin(int level);
 // Return 0 if impossible move
 int isValidPositionTaquin(Item *grille, int pos);
 
+// Renvoie la solution
 void showSolution( Item *goal );
 
+// Renvoie la distance de Manhattan
 double getManhattanHeuristic(Item *node);
 
+// Renvoie la profondeur
 double getSimpleHeuristics(Item *node);
+
+// renvoie la distance totale entre la piece et l'objectif
+int evaluateBoardTaq1(Item *piece);
+
+// Renvoie un enfant de parent valide a pos
+Item *getChildNode(Item *parent, int pos);
+
+// Renvoie un enfant de parent, mais fixe f a depth
+Item *getChildNodeUCS(Item *parent, int pos);
+
+// Calcule un bfs
+void bfs(void);
+
+// Calcule un dfs
+void dfs(Item *node);
+
+// Calcule un Astar
+void astar(void);
+
+// calcule un UCS
+void UCS(void);
